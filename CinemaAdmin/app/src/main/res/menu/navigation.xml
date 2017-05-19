@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_bottom_1"
+        android:icon="@mipmap/ic_local_movies_black_24dp"
+        android:title="影片" />
+
+    <item
+        android:id="@+id/navigation_bottom_2"
+        android:icon="@mipmap/ic_event_seat_black_24dp"
+        android:title="影厅" />
+
+    <item
+        android:id="@+id/navigation_bottom_3"
+        android:icon="@mipmap/ic_subscriptions_black_24dp"
+        android:title="排片" />
+
+    <item
+        android:id="@+id/navigation_bottom_4"
+        android:icon="@mipmap/ic_account_balance_wallet_black_24dp"
+        android:title="流水" />
+
+    <item
+        android:id="@+id/navigation_bottom_5"
+        android:icon="@mipmap/ic_group_black_24dp"
+        android:title="人事" />
+
+</menu>
