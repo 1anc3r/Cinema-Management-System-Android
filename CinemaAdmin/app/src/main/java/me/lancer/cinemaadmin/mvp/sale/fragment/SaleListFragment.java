@@ -1,4 +1,4 @@
-package me.lancer.cinemaadmin.mvp.schedule.fragment;
+package me.lancer.cinemaadmin.mvp.sale.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,10 +19,10 @@ import java.util.List;
 
 import me.lancer.cinemaadmin.R;
 import me.lancer.cinemaadmin.mvp.base.activity.PresenterFragment;
-import me.lancer.cinemaadmin.mvp.schedule.IScheduleView;
-import me.lancer.cinemaadmin.mvp.schedule.ScheduleBean;
-import me.lancer.cinemaadmin.mvp.schedule.SchedulePresenter;
-import me.lancer.cinemaadmin.mvp.schedule.adapter.ScheduleAdapter;
+import me.lancer.cinemaadmin.mvp.sale.ISaleView;
+import me.lancer.cinemaadmin.mvp.sale.SaleBean;
+import me.lancer.cinemaadmin.mvp.sale.SalePresenter;
+import me.lancer.cinemaadmin.mvp.sale.adapter.SaleAdapter;
 import me.lancer.cinemaadmin.ui.activity.MainActivity;
 import me.lancer.cinemaadmin.ui.application.mApp;
 
@@ -30,7 +30,7 @@ import me.lancer.cinemaadmin.ui.application.mApp;
  * Created by HuangFangzhi on 2016/12/18.
  */
 
-public class ScheduleListFragment extends PresenterFragment<SchedulePresenter> implements IScheduleView {
+public class SaleListFragment extends PresenterFragment<SalePresenter> implements ISaleView {
 
     mApp app;
 
@@ -38,13 +38,13 @@ public class ScheduleListFragment extends PresenterFragment<SchedulePresenter> i
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
 
-    private ScheduleAdapter mAdapter;
+    private SaleAdapter mAdapter;
 
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
-    private List<ScheduleBean> mList = new ArrayList<>();
+    private List<SaleBean> mList = new ArrayList<>();
 
     private int last = 0;
-    private String id="", studid="", playid="", time="", price="", session;
+    private String id = "", empid = "", time = "", payment = "", change = "", type = "", status = "", session;
 
     private Handler handler = new Handler() {
         @Override
@@ -62,8 +62,8 @@ public class ScheduleListFragment extends PresenterFragment<SchedulePresenter> i
                 case 3:
                     if (msg.obj != null) {
                         mList.clear();
-                        mList.addAll((List<ScheduleBean>) msg.obj);
-                        mAdapter = new ScheduleAdapter(getActivity(), mList);
+                        mList.addAll((List<SaleBean>) msg.obj);
+                        mAdapter = new SaleAdapter(getActivity(), mList);
                         mRecyclerView.setAdapter(mAdapter);
                     }
                     break;
@@ -74,7 +74,7 @@ public class ScheduleListFragment extends PresenterFragment<SchedulePresenter> i
     private Runnable fetch = new Runnable() {
         @Override
         public void run() {
-            presenter.fetch(id, studid, playid, time, price, session);
+            presenter.fetch(id, empid, time, payment, change, type, status, session);
         }
     };
 
@@ -89,7 +89,7 @@ public class ScheduleListFragment extends PresenterFragment<SchedulePresenter> i
         super.onViewCreated(view, savedInstanceState);
         app = (mApp) getActivity().getApplication();
         toolbar = (Toolbar) view.findViewById(R.id.t_large);
-        toolbar.setTitle("排片");
+        toolbar.setTitle("流水");
         ((MainActivity) getActivity()).initDrawer(toolbar);
         initView(view);
         initData();
@@ -121,7 +121,7 @@ public class ScheduleListFragment extends PresenterFragment<SchedulePresenter> i
         mRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new ScheduleAdapter(getActivity(), mList);
+        mAdapter = new SaleAdapter(getActivity(), mList);
         mAdapter.setHasStableIds(true);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -157,8 +157,8 @@ public class ScheduleListFragment extends PresenterFragment<SchedulePresenter> i
     }
 
     @Override
-    protected SchedulePresenter onCreatePresenter() {
-        return new SchedulePresenter(this);
+    protected SalePresenter onCreatePresenter() {
+        return new SalePresenter(this);
     }
 
 
@@ -168,7 +168,7 @@ public class ScheduleListFragment extends PresenterFragment<SchedulePresenter> i
     }
 
     @Override
-    public void showFetch(List<ScheduleBean> list) {
+    public void showFetch(List<SaleBean> list) {
         Message msg = new Message();
         msg.what = 3;
         msg.obj = list;

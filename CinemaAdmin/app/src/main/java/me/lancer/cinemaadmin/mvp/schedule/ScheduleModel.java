@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.lancer.cinemaadmin.mvp.play.PlayBean;
+import me.lancer.cinemaadmin.mvp.sale.TicketBean;
 import me.lancer.cinemaadmin.mvp.studio.SeatBean;
 import me.lancer.cinemaadmin.mvp.studio.StudioBean;
 import me.lancer.cinemaadmin.util.ContentGetterSetter;
@@ -30,6 +31,7 @@ public class ScheduleModel {
     String studioUrl = contentGetterSetter.url+"studio?method=fetch";
     String playUrl = contentGetterSetter.url+"play?method=fetch";
     String seatsUrl = contentGetterSetter.url+"seat?method=fetch";
+    String ticksUrl = contentGetterSetter.url+"ticket?method=fetch";
 
     public ScheduleModel(ISchedulePresenter presenter) {
         this.presenter = presenter;
@@ -115,7 +117,7 @@ public class ScheduleModel {
         }
     }
 
-    public List<SeatBean> seatlist(String stud, String session) {
+    public List<SeatBean> seats(String stud, String session) {
         String content = contentGetterSetter.getContentFromHtml("seatlist", seatsUrl + "&studid=" + stud + "&session=" + session);
         List<SeatBean> list;
         if (!content.contains("获取失败!")) {
@@ -123,6 +125,22 @@ public class ScheduleModel {
             return list;
         } else {
             Log.e("seatlist", content);
+            return null;
+        }
+    }
+
+    public List<TicketBean> ticks(String schedid, String session, ScheduleBean sched) {
+        String content = contentGetterSetter.getContentFromHtml("ticket", ticksUrl + "&schedid=" + schedid + "&session=" + session);
+        List<TicketBean> list;
+        if (!content.contains("获取失败!")) {
+            list = getTicketListFromContent(content, session, sched);
+            if (list.size()>0) {
+                return list;
+            }else{
+                return null;
+            }
+        } else {
+            Log.e("ticket", content);
             return null;
         }
     }
@@ -158,6 +176,7 @@ public class ScheduleModel {
                     bean.setPrice(jbItem.getDouble("price"));
                     bean.setStud(studio(String.valueOf(bean.getStudid()), session));
                     bean.setPlay(play(String.valueOf(bean.getPlayid()), session));
+                    bean.setTicks(ticks(String.valueOf(bean.getId()), session, bean));
                     list.add(bean);
                 }
             } else {
@@ -188,7 +207,7 @@ public class ScheduleModel {
                     bean.setStatus(jbItem.getInt("studioFlag"));
                     bean.setRows(jbItem.getInt("rowCount"));
                     bean.setCols(jbItem.getInt("colCount"));
-                    bean.setSeats(seatlist(String.valueOf(bean.getId()), session));
+                    bean.setSeats(seats(String.valueOf(bean.getId()), session));
                     list.add(bean);
                 }
             } else {
@@ -232,6 +251,38 @@ public class ScheduleModel {
         }
     }
 
+    private List<TicketBean> getTicketListFromContent(String content, String session, ScheduleBean sched) {
+        try {
+            List<TicketBean> list = new ArrayList<>();
+            JSONObject jsonObj = new JSONObject(content);
+            int code = jsonObj.getInt("code");
+            if (code == 0) {
+                JSONArray jsonArr = jsonObj.getJSONArray("data");
+                for (int i = 0; i < jsonArr.length(); i++) {
+                    TicketBean bean = new TicketBean();
+                    JSONObject jbItem = jsonArr.getJSONObject(i);
+                    bean.setId(jbItem.getInt("id"));
+                    bean.setSeatid(jbItem.getInt("seatId"));
+                    bean.setSeat(seats(String.valueOf(bean.getSeatid()), session).get(0));
+                    bean.setSchedid(jbItem.getInt("scheduleId"));
+                    bean.setSched(sched);
+                    bean.setPrice(jbItem.getDouble("price"));
+                    bean.setStatus(jbItem.getInt("status"));
+                    bean.setLocktime(jbItem.getString("locked_time"));
+                    list.add(bean);
+                }
+            } else {
+                TicketBean bean = new TicketBean();
+                bean.setResult(jsonObj.getString("data"));
+                list.add(bean);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private List<PlayBean> getPlayListFromContent(String content) {
         try {
             Log.e("play", content);
@@ -247,7 +298,7 @@ public class ScheduleModel {
                     bean.setType(jbItem.getInt("typeId"));
                     bean.setLang(jbItem.getInt("langId"));
                     bean.setName(jbItem.getString("name"));
-                    bean.setIntroduction(jbItem.getString("introduction"));
+                    bean.setIntroduction(jbItem.getString("introduction").replace("\\n", "<br><strong>").replace(" : ", "</strong> : "));
                     if (jbItem.has("image")) {
                         bean.setImg(jbItem.getString("image"));
                     }else{

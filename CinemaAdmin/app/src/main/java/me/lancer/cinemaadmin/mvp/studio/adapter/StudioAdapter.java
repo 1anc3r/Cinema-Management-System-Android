@@ -56,7 +56,7 @@ public class StudioAdapter extends StackAdapter<Integer> {
     static class ColorItemViewHolder extends CardStackView.ViewHolder {
         View mLayout;
         View mContainerContent;
-        TextView tvTitle;
+        TextView tvTitle, tvContent;
         RecyclerView rvSeats;
 
         public ColorItemViewHolder(View view) {
@@ -64,6 +64,7 @@ public class StudioAdapter extends StackAdapter<Integer> {
             mLayout = view.findViewById(R.id.frame_list_card_item);
             mContainerContent = view.findViewById(R.id.container_list_content);
             tvTitle = (TextView) view.findViewById(R.id.text_list_card_title);
+            tvContent = (TextView) view.findViewById(R.id.tv_content);
             rvSeats = (RecyclerView) view.findViewById(R.id.rv_seats);
         }
 
@@ -75,6 +76,7 @@ public class StudioAdapter extends StackAdapter<Integer> {
         public void onBind(Integer data, int position) {
             mLayout.getBackground().setColorFilter(ContextCompat.getColor(getContext(), data), PorterDuff.Mode.SRC_IN);
             tvTitle.setText(list.get(position).getName());
+            tvContent.setText(list.get(position).getIntroduction());
             GridLayoutManager llm = new GridLayoutManager(getContext(), list.get(position).getCols());
             rvSeats.setLayoutManager(llm);
             rvSeats.setItemAnimator(new DefaultItemAnimator());

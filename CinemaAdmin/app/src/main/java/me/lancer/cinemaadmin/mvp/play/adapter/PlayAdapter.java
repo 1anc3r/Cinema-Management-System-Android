@@ -1,5 +1,6 @@
 package me.lancer.cinemaadmin.mvp.play.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
@@ -22,6 +23,7 @@ import me.lancer.cinemaadmin.R;
 import me.lancer.cinemaadmin.mvp.base.activity.BaseActivity;
 import me.lancer.cinemaadmin.mvp.play.PlayBean;
 //import me.lancer.cinemaadmin.mvp.play.activity.PlayDetailActivity;
+import me.lancer.cinemaadmin.mvp.play.activtiy.PlayDetailActivity;
 import me.lancer.cinemaadmin.util.LruImageCache;
 
 public class PlayAdapter extends RecyclerView.Adapter<PlayAdapter.ViewHolder> {
@@ -60,7 +62,7 @@ public class PlayAdapter extends RecyclerView.Adapter<PlayAdapter.ViewHolder> {
             viewHolder.cvLarge.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    PlayDetailActivity.startActivity((Activity) context, list.get(position).getId(), list.get(position).getName(), list.get(position).getImg(), viewHolder.ivImg);
                 }
             });
         }

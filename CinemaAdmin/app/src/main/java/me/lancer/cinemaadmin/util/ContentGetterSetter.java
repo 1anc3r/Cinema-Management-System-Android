@@ -15,7 +15,9 @@ import java.io.IOException;
 
 public class ContentGetterSetter {
 
-    public String url = "http://www.1anc3r.cn/CinemaManagementSystem/";
+    public String url = "http://111.231.1.112/CinemaManagementSystem/";
+
+//    public String url = "http://192.168.1.103:8080/Cinema-Management-System-Web/";
 
     public ContentGetterSetter() {
     }

@@ -105,7 +105,7 @@ public class PlayModel {
                     bean.setType(jbItem.getInt("typeId"));
                     bean.setLang(jbItem.getInt("langId"));
                     bean.setName(jbItem.getString("name"));
-                    bean.setIntroduction(jbItem.getString("introduction"));
+                    bean.setIntroduction(jbItem.getString("introduction").replace("\\n", "<br><strong>").replace(" : ", "</strong> : "));
                     bean.setImg(jbItem.getString("image"));
                     if (jbItem.has("image")) {
                         bean.setImg(jbItem.getString("image"));

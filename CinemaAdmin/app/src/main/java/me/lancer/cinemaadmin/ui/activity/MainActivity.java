@@ -32,11 +32,11 @@ import me.lancer.cinemaadmin.mvp.base.activity.BaseActivity;
 import me.lancer.cinemaadmin.mvp.employee.activity.LoginActivity;
 import me.lancer.cinemaadmin.mvp.employee.fragment.EmployeeListFragment;
 import me.lancer.cinemaadmin.mvp.play.fragment.PlayListFragment;
+import me.lancer.cinemaadmin.mvp.sale.fragment.SaleListFragment;
 import me.lancer.cinemaadmin.mvp.schedule.fragment.ScheduleListFragment;
 import me.lancer.cinemaadmin.mvp.studio.fragment.StudioListFragment;
 import me.lancer.cinemaadmin.ui.application.mApp;
 import me.lancer.cinemaadmin.ui.application.mParams;
-import me.lancer.cinemaadmin.ui.fragment.BlankFragment;
 import me.lancer.cinemaadmin.ui.view.CircleImageView;
 
 public class MainActivity extends BaseActivity {
@@ -181,7 +181,7 @@ public class MainActivity extends BaseActivity {
                     bottomNavigationView.setSelectedItemId(R.id.navigation_bottom_4);
                     currentIndex = 0;
                     menuItem.setChecked(true);
-                    currentFragment = new BlankFragment();
+                    currentFragment = new SaleListFragment();
                     bundle.putInt(getString(R.string.index), currentIndex);
                     currentFragment.setArguments(bundle);
                     switchContent(currentFragment);
@@ -288,7 +288,7 @@ public class MainActivity extends BaseActivity {
                     switchContent(currentFragment);
                     return true;
                 case R.id.navigation_bottom_4:
-                    currentFragment = new BlankFragment();
+                    currentFragment = new SaleListFragment();
                     bundle.putInt(getString(R.string.index), 0);
                     currentFragment.setArguments(bundle);
                     switchContent(currentFragment);

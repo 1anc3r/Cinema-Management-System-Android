@@ -3,6 +3,7 @@ package me.lancer.cinemaadmin.mvp.schedule;
 import java.util.List;
 
 import me.lancer.cinemaadmin.mvp.play.PlayBean;
+import me.lancer.cinemaadmin.mvp.sale.TicketBean;
 import me.lancer.cinemaadmin.mvp.studio.StudioBean;
 
 /**
@@ -18,6 +19,7 @@ public class ScheduleBean {
     private double price;
     private StudioBean stud;
     private PlayBean play;
+    private List<TicketBean> ticks;
 
     public ScheduleBean() {
     }
@@ -76,5 +78,13 @@ public class ScheduleBean {
 
     public void setPlay(PlayBean play) {
         this.play = play;
+    }
+
+    public List<TicketBean> getTicks() {
+        return ticks;
+    }
+
+    public void setTicks(List<TicketBean> ticks) {
+        this.ticks = ticks;
     }
 }

@@ -35,9 +35,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="100dp"
                 android:layout_marginLeft="4dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginRight="4dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -54,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:maxLines="1"
+                    android:maxLines="4"
                     android:textSize="14sp" />
 
             </LinearLayout>

@@ -39,7 +39,7 @@ public class LoginActivity extends PresenterActivity<EmployeePresenter> implemen
     private ClearEditText cetUsername;
     private EditText etPassword;
     private Button btnLogin;
-//    private ProgressDialog pdLogin;
+    private ProgressDialog pdLogin;
     private String id = "", access = "", username = "", password = "", number = "", address = "", tel = "", email = "", session;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -49,10 +49,10 @@ public class LoginActivity extends PresenterActivity<EmployeePresenter> implemen
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
-//                    pdLogin.dismiss();
+                    pdLogin.dismiss();
                     break;
                 case 1:
-//                    pdLogin.show();
+                    pdLogin.show();
                     break;
                 case 2:
                     Log.e("log", (String) msg.obj);
@@ -124,9 +124,9 @@ public class LoginActivity extends PresenterActivity<EmployeePresenter> implemen
         etPassword.setText(password);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(vOnClickListener);
-//        pdLogin = new ProgressDialog(this);
-//        pdLogin.setMessage("正在登录...");
-//        pdLogin.setCancelable(false);
+        pdLogin = new ProgressDialog(this);
+        pdLogin.setMessage("正在登录...");
+        pdLogin.setCancelable(false);
     }
 
     private View.OnClickListener vOnClickListener = new View.OnClickListener() {

@@ -150,17 +150,16 @@
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tv_content"
+        <me.lancer.cinemaadmin.ui.view.htmltextview.HtmlTextView
+            android:id="@+id/htv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rl_tmp"
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:layout_marginTop="4dp"
             android:ellipsize="end"
-            android:maxLines="12"
+            android:maxLines="13"
             android:textSize="14sp" />
 
     </RelativeLayout>

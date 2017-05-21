@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,30 +13,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import me.lancer.cinemaadmin.R;
 import me.lancer.cinemaadmin.mvp.base.activity.BaseActivity;
 import me.lancer.cinemaadmin.mvp.schedule.ScheduleBean;
-import me.lancer.cinemaadmin.mvp.studio.SeatBean;
 import me.lancer.cinemaadmin.mvp.studio.adapter.SeatAdapter;
+import me.lancer.cinemaadmin.ui.view.htmltextview.HtmlHttpImageGetter;
+import me.lancer.cinemaadmin.ui.view.htmltextview.HtmlTextView;
 import me.lancer.cinemaadmin.util.LruImageCache;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
@@ -74,8 +65,6 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
             ImageLoader loader = new ImageLoader(mQueue, cache);
             viewHolder.ivImg.setDefaultImageResId(R.mipmap.ic_pictures_no);
             viewHolder.ivImg.setErrorImageResId(R.mipmap.ic_pictures_no);
-            Log.e("img", list.get(position).getPlay().getImg());
-            Log.e("post", list.get(position).getPlay().getPost());
             viewHolder.ivImg.setImageUrl(list.get(position).getPlay().getPost(), loader);
             viewHolder.cvShow0.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -91,12 +80,12 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
             viewHolder.tvDone.setText(item.getPlay().getName());
             viewHolder.tvDate.setText(item.getTime());
             viewHolder.tvPrice.setText("$" + item.getPrice());
-            viewHolder.tvContent.setText(item.getPlay().getIntroduction().replace("\\n", "\n"));
+            viewHolder.htvContent.setHtml(item.getPlay().getIntroduction(), new HtmlHttpImageGetter(viewHolder.htvContent));
             GridLayoutManager mGridLayoutManager = new GridLayoutManager(context, list.get(position).getStud().getCols());
             viewHolder.rvSeats.setLayoutManager(mGridLayoutManager);
             viewHolder.rvSeats.setItemAnimator(new DefaultItemAnimator());
             viewHolder.rvSeats.setHasFixedSize(false);
-            viewHolder.mAdapter = new SeatAdapter(this.context, list.get(position).getStud().getSeats());
+            viewHolder.mAdapter = new SeatAdapter(this.context, list.get(position).getStud().getSeats(), list.get(position).getTicks());
             viewHolder.mAdapter.setHasStableIds(true);
             viewHolder.rvSeats.setAdapter(viewHolder.mAdapter);
         }
@@ -124,8 +113,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
                 ObjectAnimator.ofFloat(viewHolder.rlShow1, "translationX", 0, viewHolder.rlShow0.getWidth() * 0.55f),
                 ObjectAnimator.ofFloat(viewHolder.cvShow0, "scaleX", 1, 0.65f),
                 ObjectAnimator.ofFloat(viewHolder.cvShow1, "scaleX", 1, 0.65f),
-                ObjectAnimator.ofFloat(viewHolder.tvContent, "translationX", 0, dp2px(50)),
-                ObjectAnimator.ofFloat(viewHolder.tvContent, "alpha", 1.0f, 0.0f),
+                ObjectAnimator.ofFloat(viewHolder.htvContent, "translationX", 0, dp2px(50)),
+                ObjectAnimator.ofFloat(viewHolder.htvContent, "alpha", 1.0f, 0.0f),
                 ObjectAnimator.ofFloat(viewHolder.tvDone, "translationX", 0, dp2px(50)),
                 ObjectAnimator.ofFloat(viewHolder.tvBack, "translationX", 0, -dp2px(50)),
                 ObjectAnimator.ofFloat(viewHolder.tvDate, "translationX", 0, dp2px(200)),
@@ -175,8 +164,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
                 ObjectAnimator.ofFloat(viewHolder.rlShow1, "translationX", viewHolder.rlShow0.getWidth() * 0.55f, 0),
                 ObjectAnimator.ofFloat(viewHolder.cvShow0, "scaleX", 0.65f, 1),
                 ObjectAnimator.ofFloat(viewHolder.cvShow1, "scaleX", 0.65f, 1),
-                ObjectAnimator.ofFloat(viewHolder.tvContent, "alpha", 0.0f, 1.0f),
-                ObjectAnimator.ofFloat(viewHolder.tvContent, "translationX", dp2px(50), 0),
+                ObjectAnimator.ofFloat(viewHolder.htvContent, "alpha", 0.0f, 1.0f),
+                ObjectAnimator.ofFloat(viewHolder.htvContent, "translationX", dp2px(50), 0),
                 ObjectAnimator.ofFloat(viewHolder.tvDone, "translationX", dp2px(50), 0),
                 ObjectAnimator.ofFloat(viewHolder.tvBack, "translationX", -dp2px(50), 0),
                 ObjectAnimator.ofFloat(viewHolder.tvDate, "translationX", dp2px(200), 0),
@@ -220,7 +209,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         private View vScreen;
         private CardView cvShow0, cvShow1;
         private RelativeLayout rlShow0, rlShow1;
-        private TextView tvBack, tvDone, tvContent, tvDate, tvPrice;
+        private HtmlTextView htvContent;
+        private TextView tvBack, tvDone, tvDate, tvPrice;
         private RecyclerView rvSeats;
         private SeatAdapter mAdapter;
         private String Name, Done = "成交";
@@ -236,7 +226,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
             rlShow1 = (RelativeLayout) rootView.findViewById(R.id.rl_show1);
             tvBack = (TextView) rootView.findViewById(R.id.tv_back);
             tvDone = (TextView) rootView.findViewById(R.id.tv_done);
-            tvContent = (TextView) rootView.findViewById(R.id.tv_content);
+            htvContent = (HtmlTextView) rootView.findViewById(R.id.htv_content);
             tvDate = (TextView) rootView.findViewById(R.id.tv_date);
             tvPrice = (TextView) rootView.findViewById(R.id.tv_price);
             rvSeats = (RecyclerView) rootView.findViewById(R.id.rv_seats);
