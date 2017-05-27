@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@mipmap/ic_event_seat_black_24dp"
+    android:id="@+id/iv_seat"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_margin="2dp"
+    android:scaleType="fitCenter"
+    android:orientation="vertical"
+    android:layout_centerHorizontal="true">
+
+</ImageView>
