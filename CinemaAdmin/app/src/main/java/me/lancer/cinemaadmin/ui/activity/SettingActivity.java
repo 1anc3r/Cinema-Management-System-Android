@@ -28,6 +28,8 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.polaric.colorful.ColorPickerDialog;
+import org.polaric.colorful.Colorful;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,7 @@ public class SettingActivity extends BaseActivity {
 
     private mApp app;
 
-    private LinearLayout llNight, llFunc, llProblem, llFeedback, llDownload, llAboutUs;
+    private LinearLayout llNight, llTheme, llFunc, llProblem, llFeedback, llDownload, llAboutUs;
     private Button btnLoginOut;
     private SwitchCompat scNight;
     private BottomSheetDialog listDialog;
@@ -54,7 +56,7 @@ public class SettingActivity extends BaseActivity {
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private boolean isNight = false;
+    private boolean night = false;
 
     private List<String> funcList = new ArrayList<>(), problemList = new ArrayList<>();
     private List<RepositoryBean> reList = new ArrayList<>();
@@ -118,6 +120,8 @@ public class SettingActivity extends BaseActivity {
         initToolbar(getString(R.string.settingcn));
         llNight = (LinearLayout) findViewById(R.id.ll_night);
         llNight.setOnClickListener(vOnClickListener);
+        llTheme = (LinearLayout) findViewById(R.id.ll_theme);
+        llTheme.setOnClickListener(vOnClickListener);
         llFunc = (LinearLayout) findViewById(R.id.ll_func);
         llFunc.setOnClickListener(vOnClickListener);
         llProblem = (LinearLayout) findViewById(R.id.ll_problem);
@@ -141,8 +145,8 @@ public class SettingActivity extends BaseActivity {
         app = (mApp) getApplication();
         sharedPreferences = getSharedPreferences(getString(R.string.spf_user), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        isNight = sharedPreferences.getBoolean(mParams.ISNIGHT, false);
-        scNight.setChecked(isNight);
+        night = sharedPreferences.getBoolean(mParams.ISNIGHT, false);
+        scNight.setChecked(night);
         scNight.setClickable(false);
         funcList.add("疾病自查 : \n" +
                 "\t\t\t\t可以按照身体部位和科室分类来查询疾病，也可以点击右上角搜索按钮按照疾病名称和症状查询疾病，点击结果可以浏览疾病简介、病因、预防、病状、药品、食品、检查等");
@@ -157,19 +161,52 @@ public class SettingActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
             if (v == llNight) {
-                if (!isNight) {
+                if (!night) {
+//                    editor.putBoolean(mParams.night, true);
+//                    editor.apply();
+//                    scNight.setChecked(true);
+//                    getDelegate().setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//                    recreate();
+                    scNight.setChecked(true);
                     editor.putBoolean(mParams.ISNIGHT, true);
                     editor.apply();
-                    scNight.setChecked(true);
-                    getDelegate().setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    Colorful.config(SettingActivity.this)
+                            .translucent(false)
+                            .dark(true)
+                            .apply();
                     recreate();
                 } else {
+//                    editor.putBoolean(mParams.night, false);
+//                    editor.apply();
+//                    scNight.setChecked(false);
+//                    getDelegate().setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//                    recreate();
+                    scNight.setChecked(false);
                     editor.putBoolean(mParams.ISNIGHT, false);
                     editor.apply();
-                    scNight.setChecked(false);
-                    getDelegate().setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    Colorful.config(SettingActivity.this)
+                            .translucent(false)
+                            .dark(false)
+                            .apply();
                     recreate();
                 }
+                night = !night;
+            } else if (v == llTheme) {
+                ColorPickerDialog dialog = new ColorPickerDialog(SettingActivity.this);
+                dialog.setTitle("切换主题");
+                dialog.setOnColorSelectedListener(new ColorPickerDialog.OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(Colorful.ThemeColor themeColor) {
+                        Colorful.config(SettingActivity.this)
+                                .primaryColor(themeColor)
+                                .accentColor(themeColor)
+                                .translucent(false)
+                                .dark(night)
+                                .apply();
+                        recreate();
+                    }
+                });
+                dialog.show();
             } else if (v == llFunc) {
                 showListDialog(1, funcList);
             } else if (v == llProblem) {

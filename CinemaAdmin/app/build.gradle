@@ -20,6 +20,13 @@ android {
     }
 }
 
+allprojects {
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -36,5 +43,6 @@ dependencies {
     compile 'net.steamcrafted:load-toast:1.0.10'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'org.jsoup:jsoup:1.10.1'
+    compile 'com.github.garretyoder:Colorful:1.1'
     testCompile 'junit:junit:4.12'
 }
