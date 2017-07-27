@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spingarr">
+        <item>完好</item>
+        <item>过道</item>
+        <item>损坏</item>
+    </string-array>
+</resources>
