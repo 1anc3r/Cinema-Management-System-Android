@@ -10,4 +10,4 @@
 
 ## 截图
 
-<img src="https://github.com/1anc3r/Cinema-Management-System-Android/blob/master/Screenshots/影厅.png?raw=true" width = "288" height = "512" alt="" /><img src="https://github.com/1anc3r/Cinema-Management-System-Android/blob/master/Screenshots/影片.png?raw=true" width = "288" height = "512" alt=""/><img src="https://github.com/1anc3r/Cinema-Management-System-Android/blob/master/Screenshots/影片详情.png?raw=true" width = "288" height = "512" alt=""/>
+<img src="https://github.com/1anc3r/Cinema-Management-System-Android/blob/master/Screenshots/影厅.png?raw=true" width = "288" height = "512" alt="" /><img src="https://github.com/1anc3r/Cinema-Management-System-Android/blob/master/Screenshots/影片.png?raw=true" width = "288" height = "369" alt=""/><img src="https://github.com/1anc3r/Cinema-Management-System-Android/blob/master/Screenshots/影片详情.png?raw=true" width = "288" height = "369" alt=""/>
